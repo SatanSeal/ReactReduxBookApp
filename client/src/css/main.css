@@ -1,0 +1,67 @@
+body {
+    /*background-color: #beff63;*/
+    background-color: #b7e07d;
+}
+
+.DeleteButton{
+    background-color: rgb(231, 57, 57);
+}
+
+.EditButton{
+    background-color: rgb(255, 255, 103);
+}
+
+.AddButton{
+    background-color: chartreuse;
+}
+
+.book{
+    border: 2px double black;
+    padding: 10px;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.bookLink {
+    text-decoration: none;
+    color: black;
+}
+
+.bookArchive {
+    width: 80%;
+    margin: auto;
+}
+
+.paginationTable{
+    width: 10%;
+    margin: auto;
+}
+
+.loading {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.jwt {
+    white-space: normal
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
