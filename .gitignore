@@ -3,3 +3,4 @@ node_modules
 ngrok.*
 *.rest
 myCryptography.js
+gitInstructions.txt
