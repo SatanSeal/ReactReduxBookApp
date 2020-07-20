@@ -4,3 +4,5 @@ ngrok.*
 *.rest
 myCryptography.js
 gitInstructions.txt
+userDB.js
+bookDB.js

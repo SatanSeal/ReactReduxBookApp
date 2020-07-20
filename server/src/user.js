@@ -1,19 +1,8 @@
 require('dotenv').config();
 let express = require('express'),
     router = express.Router(),
-    { Pool } = require('pg');
+    UserPool = require('./userDB');
 
-
-// connection to user db
-
-const UserPool = new Pool({
-    host: process.env.HOST,
-    user: process.env.USER,
-    database: process.env.DATABASE,
-    table: process.env.USERSTABLE,
-    password: process.env.PASSWORD,
-    port: process.env.PORT
-});
 
 // post new user
 

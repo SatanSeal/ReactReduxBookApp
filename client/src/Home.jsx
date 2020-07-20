@@ -64,7 +64,7 @@ function Home() {
 
     return (
         <Fragment>
-            <h1>Welcome, {user.username}! {buttonChange()}</h1> 
+            <h1>Welcome to SATAN's Library, {user.username}! {buttonChange()}</h1> 
             
             <button onClick={() => handleClick('books')}>Our Library</button>
 

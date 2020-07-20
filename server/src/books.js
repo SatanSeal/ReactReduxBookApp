@@ -1,21 +1,9 @@
 require('dotenv').config();
 let express = require('express'),
     router = express.Router(),
-    { Pool } = require('pg');
-
-// connection to book db
-
-const BookPool = new Pool({
-    host: process.env.HOST,
-    user: process.env.USER,
-    database: process.env.DATABASE,
-    table: process.env.BOOKSTABLE,
-    password: process.env.PASSWORD,
-    port: process.env.PORT
-});
+    BookPool = require('./bookDB');
 
 // get all books
-
 router.get('/', async (req,res) => {
     try {
         const allBooks = await BookPool.query('SELECT * FROM "BookList" ORDER BY id');
@@ -26,7 +14,6 @@ router.get('/', async (req,res) => {
 });
 
 // get searched books
-
 router.get('/search=:select=:value', async (req, res) => {
     try {
         const SearchedBooks = await BookPool.query('SELECT * FROM "BookList" Where ' + req.params.select + "='" + req.params.value + "' ORDER BY id");
@@ -37,7 +24,6 @@ router.get('/search=:select=:value', async (req, res) => {
 });
 
 // get single book
-
 router.get('/:id', async (req,res) => {
     try {
         const { id } = req.params;
@@ -49,7 +35,6 @@ router.get('/:id', async (req,res) => {
 });
 
 // post a book
-
 router.post('/add', async (req,res) => {
     try {
         const { title, description, author } = req.body;
@@ -62,7 +47,6 @@ router.post('/add', async (req,res) => {
 });
 
 // update a book
-
 router.put('/:id', async (req,res) => {
     try {
         const { id } = req.params;
@@ -76,7 +60,6 @@ router.put('/:id', async (req,res) => {
 });
 
 // delete a book
-
 router.delete('/:id', async (req,res) => {
     try {
         const { id } = req.params;
