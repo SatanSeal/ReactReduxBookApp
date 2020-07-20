@@ -12,13 +12,13 @@ function Home() {
     const [CSRFToken, setCSRFToken] = useState();
 
     const vj = async (req, res) => {
-        const response = await fetch('/verifyJWT');
+        const response = await fetch('/secure/verifyJWT');
         const user = await response.json();
         setUser(user); 
     }; 
 
     const getCSRFToken = async () => {
-        const response = await fetch ('/csrf-token');
+        const response = await fetch ('/secure/csrf-token');
         const token = await response.json();
         setCSRFToken(JSON.stringify(token).split('"')[3]);
     };
@@ -28,7 +28,7 @@ function Home() {
     }
 
     const logout = async () => {
-        await fetch('/logout');
+        await fetch('/user/logout');
         vj();
     }
 
@@ -36,8 +36,8 @@ function Home() {
         if (user.username === "Guest"){
             return (
                 <Fragment>
-                    <button onClick={() => handleClick('registration')}>Register</button> 
-                    <button onClick={() => handleClick('login')}>Log In</button>
+                    <button onClick={() => handleClick('user/registration')}>Register</button> 
+                    <button onClick={() => handleClick('user/login')}>Log In</button>
                 </Fragment>
             );
         } else {

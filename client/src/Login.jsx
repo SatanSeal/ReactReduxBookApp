@@ -12,18 +12,19 @@ const Login = () => {
 
     const getJwt = async (user) => {
         const body = { user };
-        await fetch('/jwt', {
+        await fetch('/secure/jwt', {
             method: "POST",
             headers: {"Content-Type": "application/json",
                       "CSRF-Token" : CSRFToken},
             body: JSON.stringify(body)
         });
     };
-    
+
     const getCSRFToken = async () => {
-        const response = await fetch ('/csrf-token');
+        const response = await fetch ('/secure/csrf-token');
         const token = await response.json();
         setCSRFToken(JSON.stringify(token).split('"')[3]);
+        return JSON.stringify(token).split('"')[3];
     };
 
     const mailCheck = (mail) => {
@@ -59,8 +60,8 @@ const Login = () => {
             return alert('Password incorrect!\nPassword must contain at least: 1 capital letter, 3 letters , 3 numeric, 1 special( !#%&,-.:;<=>@_ )');
         }
         const body = { email };
-        //await getCSRFToken(); не работает
-        const response = await fetch('/login', {
+
+        const response = await fetch('/user/login', {
             method: "POST",
             headers: {"Content-Type": "application/json",
                       "CSRF-Token" : CSRFToken},
@@ -104,7 +105,7 @@ const Login = () => {
             <br />
             <div>
                 <h3>Don't have an account?</h3>
-                <button onClick={() => history.push('/registration')}>Register</button>
+                <button onClick={() => history.push('/user/registration')}>Register</button>
             </div>
             <br />
             <br />
@@ -114,13 +115,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-/*
-    const [fetchError, setFetchError] = useState(null);
-
-              {fetchError && (
-            <p style={{ color: 'red' }}>{fetchError}</p>
-            )}
-
-*/

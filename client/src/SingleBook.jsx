@@ -25,18 +25,22 @@ const Book = ({ match }) => {
     }
 
     const vj = async (req, res) => {
-        const response = await fetch('/verifyJWT');
+        const response = await fetch('/secure/verifyJWT');
         const user = await response.json();
         setUser(user); 
     }; 
 
     const getCSRFToken = async () => {
-        const response = await fetch ('/csrf-token');
+        const response = await fetch ('/secure/csrf-token');
         const token = await response.json();
         setCSRFToken(JSON.stringify(token).split('"')[3]);
     };
 
     const deleteBook = async (id) => {
+        let check = window.confirm('Are you sure want to delete this book?');
+        if (!check) {
+            return;
+        }
         try {
             await fetch(`/books/${id}`, {
                 method: "DELETE",
@@ -75,13 +79,16 @@ const Book = ({ match }) => {
 
     if (Loading) {
         return (
-            <h1 className='loading'>Loading...</h1>
+            <Fragment>
+                <h1 className='loading'>Loading...</h1>
+                <button onClick={() => history.goBack}>Go back</button>
+            </Fragment>
         )
     }
     return (
         <Fragment>
             <button onClick={() => history.push('/')}>Home</button>
-            <button onClick={() => history.push('/books')}>Back to library</button>
+            <button onClick={() => history.goBack()}>Go back</button>
             <h3>Logined as: {user.username}</h3>
             <h1>Title: {book.title}</h1>
             <h1>Description: {book.description}</h1>

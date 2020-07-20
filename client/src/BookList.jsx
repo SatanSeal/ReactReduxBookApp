@@ -1,11 +1,13 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import '../css/main.css';
-import Books from './Books';
-import Pagination from './Pagination';
+import './css/main.css';
+import Books from './components/Books';
+import Pagination from './components/Pagination';
 
 const BookList = () => {
+
+    let history = useHistory();
 
     const [AllBooks, setAllBooks] = useState([]);
     const [Loading, setLoading] = useState(false);
@@ -33,14 +35,19 @@ const BookList = () => {
     }, []);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+    if (Loading) {
+        return (
+            <Fragment>
+                <h1>Loading</h1>
+                <button onClick={()=>history.push('/')}>Home</button>
+            </Fragment>
+        )
+    }
     return (
         <Fragment>
-            <Link to='/'>
-                <button>Home</button>
-            </Link>
+            <button onClick={()=>history.push('/')}>Home</button>
             <h1 style={{textAlign: 'center'}}>BookList</h1>
-            <Books books={CurrentBooks} loading={Loading} />
+            <Books books={CurrentBooks} />
             <Pagination 
                 booksPerPage={BooksPerPage} 
                 totalBooks={AllBooks.length} 

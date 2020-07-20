@@ -14,7 +14,7 @@ const Registration = () => {
     //const [regError, setRegError] = useState(null);
 
     const getCSRFToken = async () => {
-        const response = await fetch ('/csrf-token');
+        const response = await fetch ('/secure/csrf-token');
         const token = await response.json();
         setCSRFToken(JSON.stringify(token).split('"')[3]);
     }
@@ -22,7 +22,7 @@ const Registration = () => {
     const FindUser = async (parameter, value) => {
         try{
             const body = { parameter, value };
-            const response = await fetch('/check', {
+            const response = await fetch('/user/check', {
                 method: "POST",
                 headers: {"Content-Type": "application/json",
                           "CSRF-Token" : CSRFToken},
@@ -102,7 +102,7 @@ const Registration = () => {
                 if (err) throw err;
                 try {
                     const body = { username, email, hashedPassword };
-                    fetch('/register', {
+                    fetch('/user/register', {
                         method: "POST",
                         headers: {"Content-Type": "application/json",
                                   "CSRF-Token" : CSRFToken},
@@ -114,7 +114,7 @@ const Registration = () => {
                     ).then(
                         alert('User created!')
                     ).then(
-                        history.push('/login')
+                        history.push('/user/login')
                     );
                 } catch (err) {
                     console.error(err.message)
@@ -150,7 +150,7 @@ const Registration = () => {
 
             <div>
                 <h3>Have an account?</h3>
-                <button onClick={() => history.push('/login')}>Log In</button>
+                <button onClick={() => history.push('/user/login')}>Log In</button>
             </div>
         </div>
     )

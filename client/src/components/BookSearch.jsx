@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useHistory} from 'react-router-dom';
 
 const Search = () => {
+
+    const history = useHistory();
 
     const [Select,  setSelect ] = useState('title');
     const [Value, setValue ] = useState('');
 
     const onSearchClick = () => {
-        window.location.href=`/search=${Select}=${Value}`;
+        history.push(`/books/search=${Select}=${Value}`)
     };
 
     return (

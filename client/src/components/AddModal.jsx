@@ -17,7 +17,7 @@ const AddModal = ({author, CSRFToken}) => {
         }
         try {
             const body = { title, description, author };
-            await fetch("/add", {
+            await fetch("/books/add", {
                 method: "POST",
                 headers: {"Content-Type": "application/json",
                           "CSRF-Token" : CSRFToken},

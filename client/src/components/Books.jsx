@@ -2,13 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/main.css';
 
-const Books = ({books, loading}) => {
+const Books = ({books}) => {
 
-    if (loading) {
-        return (
-            <h1 className='loading'>Loading...</h1>
-        )
-    }
     return (
         <ul type='none' className='bookArchive'>
             {books.map(book => (
