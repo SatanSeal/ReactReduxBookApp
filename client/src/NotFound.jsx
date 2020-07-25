@@ -1,11 +1,18 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import MyHeader from './components/MyHeader';
 
 const NotFound = () => {
+
+    let history = useHistory();
+
     return (
         <Fragment>
-            <h1>Page Not Found</h1>
-            <Link to='/'>Go home</Link>
+            <MyHeader />
+            <div style={{textAlign: 'center'}}>
+                <h1>Page Not Found</h1>
+                <button onClick={() => history.goBack()}>Go back</button>
+            </div>
         </Fragment>
     )
 };

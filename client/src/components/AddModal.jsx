@@ -1,11 +1,22 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import '../css/main.css';
 
-const AddModal = ({author, CSRFToken}) => {
+const AddModal = ({author}) => {
 
     const [title,  setTitle ] = useState('');
     const [description, setDescription] = useState('');
     const [isShowed, setIsShowed] = useState(false);
+    const [CSRFToken, setCSRFToken] = useState();
+
+    const getCSRFToken = async () => {
+        const response = await fetch ('/secure/csrf-token');
+        const token = await response.json();
+        setCSRFToken(JSON.stringify(token).split('"')[3]);
+    };
+
+    useEffect(() => {
+        getCSRFToken();
+    }, []);
 
     const onSubmitForm = async e => {
         e.preventDefault();
@@ -31,7 +42,6 @@ const AddModal = ({author, CSRFToken}) => {
             console.error(err.message)            
         }
     };
-    
 
         if (!isShowed) {
             return (

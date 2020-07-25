@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import './css/main.css';
 import Books from './components/Books';
 import Pagination from './components/Pagination';
+import MyHeader from './components/MyHeader';
 
 const SearchedBooks = () => {
     let history = useHistory();
@@ -15,7 +15,7 @@ const SearchedBooks = () => {
     const [AllBooks, setAllBooks ] = useState([]);
     const [Loading, setLoading ] = useState(false);
     const [CurrentPage, setCurrentPage] = useState(1);
-    const [BooksPerPage] = useState(3);
+    const [BooksPerPage] = useState(4);
 
     const indexOfLastBook = CurrentPage * BooksPerPage;
     const indexOfFirstBook = indexOfLastBook - BooksPerPage;
@@ -42,6 +42,7 @@ const SearchedBooks = () => {
     if (Loading) {
         return (
             <Fragment>
+                <MyHeader />
                 <h1>Loading</h1>
                 <button onClick={() => history.goBack()}>Go back</button>
             </Fragment>
@@ -50,15 +51,17 @@ const SearchedBooks = () => {
     if (AllBooks.length === 0) {
         return (
             <Fragment>
-                <h1> There is no books with {select} '{value}'</h1>
-                
+                <MyHeader />
+                <h1> There is no books with {select} '{decodeURIComponent(value)}'</h1>
+                <button onClick={() => history.goBack()}>Go back</button>
             </Fragment>
         )
     }
     return (
         <Fragment>
+            <MyHeader />
             <button onClick={() => history.goBack()}>Go back</button>
-            <h1 style={{textAlign: 'center'}}>BookList</h1>
+            <h1 style={{textAlign: 'center'}}>Searched books</h1>
             <Books books={CurrentBooks} loading={Loading} />
             <Pagination 
                 booksPerPage={BooksPerPage} 

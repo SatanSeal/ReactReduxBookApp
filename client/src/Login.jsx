@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
+import PureLogoHeader from './components/PureLogoHeader';
 
 const Login = () => {
 
@@ -9,6 +10,14 @@ const Login = () => {
     const [email, setEmail] = useState(null);
     const [pass, setPass] = useState(null);
     const [CSRFToken, setCSRFToken] = useState(null);
+
+    async function UserCheck() {
+        const response = await fetch('/secure/verifyJWT');
+        const user = await response.json();
+        if (user.username !== 'Guest'){
+            history.push('/');
+        }
+    }
 
     const getJwt = async (user) => {
         const body = { user };
@@ -86,30 +95,32 @@ const Login = () => {
     };
     
     useEffect(() => {
+        UserCheck();
         getCSRFToken();
+        // eslint-disable-next-line
     }, []);
 
     return (
         <Fragment>
-            <Link to='/'>
-                <button>Home</button>
-            </Link>
-            <h1>Login</h1>
-            <form onSubmit={LoginSubmit}>
-                E-mail: <input onChange={e => setEmail(e.target.value)} placeholder="example@examle.com"></input>
+            <PureLogoHeader />
+            <div style={{paddingLeft: '10px'}}>
+                <h1>Login</h1>
+                <form onSubmit={LoginSubmit}>
+                    E-mail: <input onChange={e => setEmail(e.target.value)} placeholder="example@examle.com"></input>
+                    <br />
+                    Password: <input type="password" onChange={e => setPass(e.target.value)} placeholder="Your super strong password"></input>
+                    <br />
+                    <input type="submit" value="Log In"></input>
+                </form>
                 <br />
-                Password: <input type="password" onChange={e => setPass(e.target.value)} placeholder="Your super strong password"></input>
+                <div>
+                    <h3>Don't have an account?</h3>
+                    <button onClick={() => history.push('/user/registration')}>Register</button>
+                </div>
                 <br />
-                <input type="submit" value="Log In"></input>
-            </form>
-            <br />
-            <div>
-                <h3>Don't have an account?</h3>
-                <button onClick={() => history.push('/user/registration')}>Register</button>
+                <br />
+                <h3>HappySeal333! seal@gmail.com</h3>
             </div>
-            <br />
-            <br />
-            <h3>HappySeal333! seal@gmail.com</h3>
         </Fragment>
     );
 };

@@ -9,6 +9,7 @@ import SearchedBooks from './SearchedBooks';
 import NotFound from './NotFound';
 import Registration from './Registration';
 import Login from './Login';
+import User from './User';
 
 function App() {
     return (
@@ -16,10 +17,11 @@ function App() {
             <Switch>
                 <Route path='/' exact component={Home} />
                 <Route path='/books' exact component={BookList}/>
-                <Route path='/books/search=:title=:value' exact component={SearchedBooks} />
-                <Route path='/books/:id' exact component={SingleBook} />
-                <Route path='/user/registration' exact component={Registration} />
-                <Route path='/user/login' exact component={Login} />
+                <Route path='/search=:title=:value' exact component={SearchedBooks} /> 
+                <Route path='/book_:id' exact component={SingleBook} />            {/* not working normal */}
+                <Route path='/registration' exact component={Registration} />
+                <Route path='/login' exact component={Login} />
+                <Route path='/user' exact component={User}/> 
                 <Route component={NotFound} />
             </Switch>
         </Router>

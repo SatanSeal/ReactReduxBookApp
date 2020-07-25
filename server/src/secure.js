@@ -24,6 +24,15 @@ router.post('/jwt', async (req, res) => {
 */
 
 // new version
+
+function generateAccessToken(user){
+    const payload = { id: user.id, username: user.username, admin: user.admin, email: user.email};
+    const token = jsonwebtoken.sign(payload, process.env.JWTSECRET , {algorithm: 'HS256'});
+    const firstEncodeStep = crypt.littleEncryption(token);
+    const encodedToken = crypt.encrypt(firstEncodeStep);
+    res.cookie('hps', encodedToken, {maxAge: 2* 60* 60 * 1000, httpOnly: true, sameSite: "strict"}); // maxAge=2hours, toAdd secure: true
+}
+
 router.post('/jwt', async (req, res) => {
     try {
         const { user } = req.body; 
@@ -31,7 +40,11 @@ router.post('/jwt', async (req, res) => {
         const token = jsonwebtoken.sign(payload, process.env.JWTSECRET , {algorithm: 'HS256'});
         const firstEncodeStep = crypt.littleEncryption(token);
         const encodedToken = crypt.encrypt(firstEncodeStep);
-        res.cookie('hps', encodedToken, {maxAge: 30* 60 * 1000, httpOnly: true/*, sameSite: "strict"*/}); // maxAge=30mins, toAdd secure: true
+        res.cookie('hps', encodedToken, {maxAge: 2* 60* 60 * 1000, httpOnly: true, sameSite: "strict"}); // maxAge=2hours, toAdd secure: true
+        const refreshToken = jsonwebtoken.sign(payload, process.env.REFRESHTOKEN , {algorithm: 'HS256'});
+        const firstEncodeStepRefresh = crypt.littleEncryption(refreshToken);
+        const encodedRefreshToken = crypt.encrypt(firstEncodeStepRefresh);
+        res.cookie('rhps', encodedRefreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "strict"}); // maxAge=7days, toAdd secure: true
         res.status(200).json(1);
     } catch (err) {
         console.error(err.messaage);

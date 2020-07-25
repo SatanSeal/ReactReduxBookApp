@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
+import PureLogoHeader from './components/PureLogoHeader';
 
 const Registration = () => {
 
@@ -12,6 +13,14 @@ const Registration = () => {
     const [secondPass, setSecondPass] = useState(null);
     const [CSRFToken, setCSRFToken] = useState(null);
     //const [regError, setRegError] = useState(null);
+
+    async function UserCheck() {
+        const response = await fetch('/secure/verifyJWT');
+        const user = await response.json();
+        if (user.username !== 'Guest'){
+            history.push('/');
+        }
+    }
 
     const getCSRFToken = async () => {
         const response = await fetch ('/secure/csrf-token');
@@ -125,32 +134,34 @@ const Registration = () => {
     };
 
     useEffect(() => {
+        UserCheck();
         getCSRFToken();
+        // eslint-disable-next-line
     }, []);
 
     return (
         <div>
-            <Link to='/'>
-                <button>Home</button>
-            </Link>
-            <h1>Registration</h1>
+            <PureLogoHeader />
+            <div style={{paddingLeft: '10px'}}>
+                <h1>Registration</h1>
 
-            <form onSubmit={RegistrationSubmit}>
-                Username: <input onChange={e => setUsername(e.target.value)}></input>
-                <br />
-                E-mail: <input onChange={e => setEmail(e.target.value)}></input>
-                <br />
-                Password: <input type="password" onChange={e => setFirstPass(e.target.value)}></input>
-                <br />
-                Repeat password: <input type="password" onChange={e => setSecondPass(e.target.value)}></input>
-                <br />
-                <input type="reset" value="Clear" />
-                <button>Submit</button>
-            </form>
+                <form onSubmit={RegistrationSubmit}>
+                    Username: <input onChange={e => setUsername(e.target.value)}></input>
+                    <br />
+                    E-mail: <input onChange={e => setEmail(e.target.value)}></input>
+                    <br />
+                    Password: <input type="password" onChange={e => setFirstPass(e.target.value)}></input>
+                    <br />
+                    Repeat password: <input type="password" onChange={e => setSecondPass(e.target.value)}></input>
+                    <br />
+                    <input type="reset" value="Clear" />
+                    <button>Submit</button>
+                </form>
 
-            <div>
-                <h3>Have an account?</h3>
-                <button onClick={() => history.push('/user/login')}>Log In</button>
+                <div>
+                    <h3>Have an account?</h3>
+                    <button onClick={() => history.push('/user/login')}>Log In</button>
+                </div>
             </div>
         </div>
     )

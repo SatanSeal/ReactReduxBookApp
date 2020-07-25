@@ -7,7 +7,7 @@ const Books = ({books}) => {
     return (
         <ul type='none' className='bookArchive'>
             {books.map(book => (
-                <Link to={`/books/${book.id}`} key={book.id} className='bookLink'>
+                <Link to={`/book_${book.id}`} key={book.id} className='bookLink'>
                     <li className='book'>
                         <strong>Title:</strong> {book.title} 
                         <br /> 

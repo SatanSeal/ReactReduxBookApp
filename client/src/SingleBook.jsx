@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import './css/main.css';
 import EditModal from './components/EditModal';
+import MyHeader from './components/MyHeader';
 import { useHistory } from 'react-router-dom';
 
 const Book = ({ match }) => {
@@ -80,20 +81,31 @@ const Book = ({ match }) => {
     if (Loading) {
         return (
             <Fragment>
+                <MyHeader />
                 <h1 className='loading'>Loading...</h1>
-                <button onClick={() => history.goBack}>Go back</button>
+                <button onClick={() => history.goBack()}>Go back</button>
             </Fragment>
+        )
+    }
+    if (book===undefined){
+        return (
+            <div>
+                <h1>Book not found!</h1>
+                <button onClick={() => history.goBack()}>Go back</button>
+            </div>
         )
     }
     return (
         <Fragment>
-            <button onClick={() => history.push('/')}>Home</button>
+            <MyHeader />
             <button onClick={() => history.goBack()}>Go back</button>
-            <h3>Logined as: {user.username}</h3>
-            <h1>Title: {book.title}</h1>
-            <h1>Description: {book.description}</h1>
-            <h1>Author: {book.author}</h1>
-            {Buttons()}
+            <div style={{textAlign: 'center'}}>
+                <h1>Title: {book.title}</h1>
+                <h1>Description: {book.description}</h1>
+                <h1>Author: {book.author}</h1>
+                <h3>id: {book.id}</h3>
+                {Buttons()}
+            </div>
         </Fragment>
     )
 }
