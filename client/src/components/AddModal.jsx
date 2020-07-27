@@ -7,6 +7,7 @@ const AddModal = ({author}) => {
     const [description, setDescription] = useState('');
     const [isShowed, setIsShowed] = useState(false);
     const [CSRFToken, setCSRFToken] = useState();
+    const [Loading, setLoading] = useState(false);
 
     const getCSRFToken = async () => {
         const response = await fetch ('/secure/csrf-token');
@@ -27,6 +28,7 @@ const AddModal = ({author}) => {
             return alert('Description required!');
         }
         try {
+            setLoading(true);
             const body = { title, description, author };
             await fetch("/books/add", {
                 method: "POST",
@@ -34,6 +36,9 @@ const AddModal = ({author}) => {
                           "CSRF-Token" : CSRFToken},
                 body: JSON.stringify(body)
             }).then(
+                setLoading(false)
+            )
+            .then(
                 alert('Book successfuly added!')
             ).then(
                 setIsShowed(false)
@@ -43,44 +48,74 @@ const AddModal = ({author}) => {
         }
     };
 
-        if (!isShowed) {
+    function loading () {
+        if (Loading) {
             return (
-                <Fragment>
-                    <button 
-                    onClick={() => setIsShowed(!isShowed)}
-                    className='AddButton'>
-                        Add Book
-                    </button>
-                </Fragment>
-            );
-        } else {
-            return(
-                <Fragment>
-                    <div className="modal">
-                        <div className= "modalContent">
-                            <h2>Add a book</h2>
-                            <form onSubmit={onSubmitForm}>
-                                Title: <input 
-                                    type="text"
-                                    onChange={e => setTitle(e.target.value)}
-                                />
-                                <br/>
-                                Description: <input
-                                    type="text"
-                                    onChange={e => setDescription(e.target.value)}
-                                />
-                                <br />
-                                <button 
-                                    className='AddButton'>
-                                    Add Book
-                                </button>
-                            </form>
-                            <button onClick={() => setIsShowed(!isShowed)}> close</button>
-                        </div>
+                <div className="modal">
+                    <div className="loadingContent">
+                        <img src='./greyLoading.svg' width='100px' alt="Loading..."></img>
                     </div>
-                </ Fragment>
-            );
-        };
+                </div>
+            )
+        }
+    }
+
+    if (!isShowed) {
+        return (
+            <Fragment>
+                <button 
+                onClick={() => setIsShowed(!isShowed)}
+                className='AddButton'>
+                    Add Book
+                </button>
+            </Fragment>
+        );
+    } else {
+        return(
+            <Fragment>
+                <div className="modal">
+                    <div className= "modalContent" style={{textAlign: 'center'}}>
+                        <h2 >Add a book</h2>
+                        <form onSubmit={onSubmitForm}>
+                            Title:
+                            <br /> 
+                            <textarea 
+                                cols="40"
+                                rows="3"
+                                onChange={e => setTitle(e.target.value)}
+                            />
+                            <br />
+                            <br />
+                            Description: 
+                            <br /> 
+                            <textarea 
+                                cols="40"
+                                rows="10"
+                                onChange={e => setDescription(e.target.value)}
+                            />
+                            <br />
+                        </form>
+                        <br />
+                        <table width="100%">
+                            <tbody>
+                                <td width="50%">
+                                    <button onClick={() => setIsShowed(!isShowed)}>close</button>
+                                </td>
+                                <td width="50%">
+                                    <button 
+                                        onClick={onSubmitForm}
+                                        className='AddButton'>
+                                        Add Book
+                                    </button>
+                                </td>
+                            </tbody>
+                        </table> 
+                    </div>
+                </div>
+                {loading()}
+            </ Fragment>
+        );
     };
+};
 
 export default AddModal;

@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MyHeader from './components/MyHeader';
+import MyFooter from './components/myFooter';
 
 function Home() {
-
-    let history = useHistory();
-
+    
     return (
         <Fragment>
             <MyHeader />
@@ -13,8 +12,11 @@ function Home() {
                 <br />
                 <h1>Welcome to SATAN's Library!</h1> 
                 <br />
-                <button  onClick={() => history.push('/books')}>Our books</button>
+                <Link to='/books'>
+                    <button>Our books</button>
+                </Link>
             </div>
+            <MyFooter />
         </Fragment>
     );
 };

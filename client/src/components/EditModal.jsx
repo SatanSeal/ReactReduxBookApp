@@ -5,10 +5,12 @@ const EditModal = ({book, CSRFToken, end}) => {
     const [isShowed, setIsShowed] = useState(false);
     const [title,  setTitle ] = useState(book.title);
     const [description, setDescription] = useState(book.description);
+    const [Loading, setLoading] = useState(false);
 
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
+            setLoading(true);
             const body = { title, description };
             await fetch(`/books/${book.id}`, {
                 method: "PUT",
@@ -16,12 +18,27 @@ const EditModal = ({book, CSRFToken, end}) => {
                           "CSRF-Token" : CSRFToken},
                 body: JSON.stringify(body)
             }).then(
+                setLoading(false)
+            )
+            .then(
                 alert('Book successfuly edited!')
             ).then(
                 end()
             );
         } catch (err) {
             console.error(err.message)            
+        }
+    }
+
+    function loading () {
+        if (Loading) {
+            return (
+                <div className="modal">
+                    <div className="loadingContent">
+                        <img src='./greyLoading.svg' width='100px' alt="Loading..."></img>
+                    </div>
+                </div>
+            )
         }
     }
 
@@ -37,27 +54,50 @@ const EditModal = ({book, CSRFToken, end}) => {
         );
     } else {
         return (
-            <Fragment>
-                <div className="modal">
-                    <div className= "modalContent">
-                    <form onSubmit={onSubmitForm}>
-                        <input 
-                        type="text"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        />
-                        <br/>
-                        <input
-                        type="text"
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        />
-                        <button className="AddButton">Change</button>
-                    </form>
-                        <button onClick={() => setIsShowed(!isShowed)}>Close</button>
+            <div className="modal">
+                <div className= "modalContent">
+                    <div style={{textAlign: "center"}}>
+                        <h2>Edit Book</h2>
+
+                        <form onSubmit={onSubmitForm}>                        
+                            Title:
+                            <br /> 
+                            <textarea 
+                                cols="40"
+                                rows="3"
+                                value={title}
+                                onChange={e => setTitle(e.target.value)}
+                            />
+                            <br />
+                            <br />
+                            Description: 
+                            <br /> 
+                            <textarea 
+                                cols="40"
+                                rows="10"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                            />    
+                        </form>
+                        <br />
+                        <table width="100%">
+                                <tbody>
+                                    <td width="50%">
+                                        <button onClick={() => setIsShowed(!isShowed)}>close</button>
+                                    </td>
+                                    <td width="50%">
+                                        <button 
+                                            onClick={onSubmitForm}
+                                            className='AddButton'>
+                                            Change
+                                        </button>
+                                    </td>
+                                </tbody>
+                            </table> 
                     </div>
                 </div>
-            </ Fragment>
+                {loading()}
+            </div>
         );
     };
 }

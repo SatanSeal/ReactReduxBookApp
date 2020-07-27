@@ -4,11 +4,27 @@ body {
 }
 
 td {
-    /*vertical-align: top;*/
     padding-bottom: 0;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 0px;
+}
+
+.footerContent {
+    text-align: right;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 10px;
+    color: rgb(139, 0, 0);  
+    font-size: smaller;
+}
+
+.myFooter {
+    background-color: #83a750;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
 }
 
 .HeaderTable {
@@ -54,13 +70,16 @@ td {
     margin: auto;
 }
 
-.loading {
-    vertical-align: middle;
-    text-align: center;
-}
-
 .jwt {
     white-space: normal
+}
+
+
+.loadingContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .modal {

@@ -36,7 +36,7 @@ router.post('/login' , async (req, res) => {
 // log out
 
 router.get('/logout', (req, res) => {
-    res.cookie('hps', null, { maxAge: -1 } );
+    res.cookie('hps', null, { maxAge: -1 });
     res.status(200).json();
 });
 

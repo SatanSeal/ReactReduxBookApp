@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
 import PureLogoHeader from './components/PureLogoHeader';
+import MyFooter from './components/myFooter';
 
 const Login = () => {
 
@@ -10,11 +11,12 @@ const Login = () => {
     const [email, setEmail] = useState(null);
     const [pass, setPass] = useState(null);
     const [CSRFToken, setCSRFToken] = useState(null);
+    const [Loading, setLoading] = useState(false);
 
     async function UserCheck() {
         const response = await fetch('/secure/verifyJWT');
-        const user = await response.json();
-        if (user.username !== 'Guest'){
+        const check = await response.json();
+        if (check !== 0){
             history.push('/');
         }
     }
@@ -68,8 +70,9 @@ const Login = () => {
         if (!passCheck(pass)){
             return alert('Password incorrect!\nPassword must contain at least: 1 capital letter, 3 letters , 3 numeric, 1 special( !#%&,-.:;<=>@_ )');
         }
-        const body = { email };
 
+        setLoading(true);
+        const body = { email };
         const response = await fetch('/user/login', {
             method: "POST",
             headers: {"Content-Type": "application/json",
@@ -78,6 +81,7 @@ const Login = () => {
         });
         var user = await response.json();
         if (!user) {
+            setLoading(false);
             return alert('E-mail or password are incorrect!');
         }
         
@@ -85,14 +89,28 @@ const Login = () => {
             if (err) throw err;
             if (res) {
                 await getJwt(user);
+                setLoading(false);
                 alert("Login successeful!");
                 history.push('/');
             } else {
                 user = null;
+                setLoading(false);
                 return alert('E-mail or password are incorrect!');
             }
         });
     };
+
+    function loading () {
+        if (Loading) {
+            return (
+                <div className="modal">
+                    <div className="loadingContent">
+                        <img src='./darkestGreenLoading.svg' width='100px' alt="Loading..."></img>
+                    </div>
+                </div>
+            )
+        }
+    }
     
     useEffect(() => {
         UserCheck();
@@ -104,23 +122,54 @@ const Login = () => {
         <Fragment>
             <PureLogoHeader />
             <div style={{paddingLeft: '10px'}}>
-                <h1>Login</h1>
+                <h1 style={{textAlign: 'center'}}>Login</h1>
                 <form onSubmit={LoginSubmit}>
-                    E-mail: <input onChange={e => setEmail(e.target.value)} placeholder="example@examle.com"></input>
-                    <br />
-                    Password: <input type="password" onChange={e => setPass(e.target.value)} placeholder="Your super strong password"></input>
-                    <br />
-                    <input type="submit" value="Log In"></input>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    E-mail:
+                                </td>
+                                <td>
+                                    <input 
+                                        onChange={e => setEmail(e.target.value.toLowerCase())} 
+                                        placeholder="example@examle.com"
+                                        size="21">
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Password:
+                                </td>
+                                <td>
+                                    <input 
+                                        type="password" 
+                                        onChange={e => setPass(e.target.value)} 
+                                        placeholder="Your super strong password"
+                                        size="21">
+                                    </input>
+                                </td>
+                            </tr>
+                            <br />
+                            <tr>
+                                <td>
+                                    <input type="submit" value="Log In"></input>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </form>
                 <br />
-                <div>
-                    <h3>Don't have an account?</h3>
-                    <button onClick={() => history.push('/user/registration')}>Register</button>
+                <div style={{paddingTop: '50px', paddingLeft: '10px'}}>
+                    <font size='5'>Don't have an account?       </font>
+                    <Link to='/registration'>
+                        <button>Register</button>
+                    </Link>
                 </div>
-                <br />
-                <br />
-                <h3>HappySeal333! seal@gmail.com</h3>
             </div>
+            <MyFooter />
+            {loading()}
         </Fragment>
     );
 };

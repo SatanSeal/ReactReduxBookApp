@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import '../css/main.css';
 import { Link } from 'react-router-dom';
-import Search from './BookSearch';
 
 const MyHeader = () => {
 
@@ -68,18 +67,17 @@ const MyHeader = () => {
     }, []);
 
     return (
-        <table className="HeaderTable" cellPadding='20'>{}
+        <table className="HeaderTable" cellPadding='20'>
             <tbody>
                 <tr >
-                    <td width="47%" >
-                        <Search />
+                    <td width="33%" >
                     </td>
-                    <td width="5%" align='center'>
+                    <td width="33%" align='center'>
                         <Link to='/'>
                             <img src="./sl.png" className="HeaderLogo" alt='logo'/>
                         </Link>
                     </td>
-                    <td width="47%" align='right'>
+                    <td width="33%" align='right'>
                         {userColumn()}
                     </td>
                 </tr>

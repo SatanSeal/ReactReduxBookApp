@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
 import PureLogoHeader from './components/PureLogoHeader';
+import MyFooter from './components/myFooter';
 
 const Registration = () => {
 
     let history = useHistory();
 
     const [username, setUsername] = useState(null);
-    const [email, setEmail] = useState(null);
+    const [email, setEmail] = useState('');
     const [firstPass, setFirstPass] = useState(null);
     const [secondPass, setSecondPass] = useState(null);
     const [CSRFToken, setCSRFToken] = useState(null);
+    const [Loading, setLoading] = useState(false);
     //const [regError, setRegError] = useState(null);
 
     async function UserCheck() {
         const response = await fetch('/secure/verifyJWT');
-        const user = await response.json();
-        if (user.username !== 'Guest'){
+        const check = await response.json();
+        if (check !== 0){
             history.push('/');
         }
     }
@@ -30,6 +32,7 @@ const Registration = () => {
 
     const FindUser = async (parameter, value) => {
         try{
+            setLoading(true);
             const body = { parameter, value };
             const response = await fetch('/user/check', {
                 method: "POST",
@@ -38,6 +41,7 @@ const Registration = () => {
                 body: JSON.stringify(body)
             });
             const existance = await response.json();
+            setLoading(false);
             return existance;
         } catch (err) {
             console.error(err.message);
@@ -104,7 +108,8 @@ const Registration = () => {
         if (!(firstPass === secondPass)) { 
             return alert('Passwords mismatch!');
         }
-        // setloading true
+
+        setLoading(true);
         bcrypt.genSalt(12, (err, salt) => {
             if (err) throw err;
             bcrypt.hash(firstPass, salt, (err, hashedPassword) => {
@@ -121,16 +126,18 @@ const Registration = () => {
                     ).then(
                         setSecondPass('')
                     ).then(
+                        setLoading(false)
+                    ).then(
                         alert('User created!')
                     ).then(
-                        history.push('/user/login')
+                        history.push('/login')
                     );
                 } catch (err) {
-                    console.error(err.message)
+                    alert('Sorry, something went wrong...');
+                    console.error(err);
                 }
             });
         });
-        //setloading false
     };
 
     useEffect(() => {
@@ -139,30 +146,77 @@ const Registration = () => {
         // eslint-disable-next-line
     }, []);
 
+    function loading () {
+        if (Loading) {
+            return (
+                <div className="modal">
+                    <div className="loadingContent">
+                        <img src='./darkestGreenLoading.svg' width='100px' alt="Loading..."></img>
+                    </div>
+                </div>
+            )
+        }
+    }
+
     return (
         <div>
             <PureLogoHeader />
             <div style={{paddingLeft: '10px'}}>
-                <h1>Registration</h1>
-
+                <h1 style={{textAlign: 'center'}}>Registration</h1>
                 <form onSubmit={RegistrationSubmit}>
-                    Username: <input onChange={e => setUsername(e.target.value)}></input>
-                    <br />
-                    E-mail: <input onChange={e => setEmail(e.target.value)}></input>
-                    <br />
-                    Password: <input type="password" onChange={e => setFirstPass(e.target.value)}></input>
-                    <br />
-                    Repeat password: <input type="password" onChange={e => setSecondPass(e.target.value)}></input>
-                    <br />
-                    <input type="reset" value="Clear" />
-                    <button>Submit</button>
+                    <table cellPadding="100">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Username:
+                                </td>
+                                <td>
+                                    <input onChange={e => setUsername(e.target.value)}></input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    E-mail:
+                                </td>
+                                <td>
+                                    <input onChange={e => setEmail(e.target.value.toLowerCase())}></input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Password:
+                                </td>
+                                <td>
+                                    <input type="password" onChange={e => setFirstPass(e.target.value)}></input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Repeat password:
+                                </td>
+                                <td>
+                                    <input type="password" onChange={e => setSecondPass(e.target.value)}></input>
+                                </td>
+                            </tr>
+                            <br />
+                            <tr>
+                                <td>
+                                    <input type="reset" value="Clear" />
+                                </td>
+                                <td>
+                                    <button>Submit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </form>
-
-                <div>
-                    <h3>Have an account?</h3>
-                    <button onClick={() => history.push('/user/login')}>Log In</button>
+                <div style={{paddingTop: '50px', paddingLeft: '10px'}}>
+                    <font size='5'>Have an account?    </font>
+                    <button onClick={() => history.push('/login')}>Log In</button>
                 </div>
             </div>
+            <MyFooter />
+            {loading()}
         </div>
     )
 };

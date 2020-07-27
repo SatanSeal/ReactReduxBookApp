@@ -2,7 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import './css/main.css';
 import EditModal from './components/EditModal';
 import MyHeader from './components/MyHeader';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import MyFooter from './components/myFooter';
 
 const Book = ({ match }) => {
 
@@ -12,7 +13,7 @@ const Book = ({ match }) => {
     const [book, setBook] = useState({});  
     const [user, setUser] = useState('');
     const [CSRFToken, setCSRFToken] = useState(null);
-        
+    
     const getBook = async () => {
         try {
             setLoading(true);
@@ -66,14 +67,20 @@ const Book = ({ match }) => {
     function Buttons () {
         if (book.author === user.username || user.admin === true) {
             return (
-                <Fragment>
-                    <EditModal book={book} CSRFToken={CSRFToken} end={getBook}/>
-                    <button 
-                        className="DeleteButton"
-                        onClick={() => deleteBook(book.id)}>
-                        Delete Book 
-                    </button>  
-                </Fragment>
+                <table width="100%">
+                    <tbody>
+                        <td width="50%" align="right">
+                            <EditModal book={book} CSRFToken={CSRFToken} end={getBook}/>
+                        </td>
+                        <td width="50%" align="left">
+                            <button 
+                                className="DeleteButton"
+                                onClick={() => deleteBook(book.id)}>
+                                Delete Book 
+                            </button>
+                        </td>
+                    </tbody>
+                </table>
             )
         }
     };
@@ -82,30 +89,52 @@ const Book = ({ match }) => {
         return (
             <Fragment>
                 <MyHeader />
-                <h1 className='loading'>Loading...</h1>
-                <button onClick={() => history.goBack()}>Go back</button>
+                <div style={{textAlign: 'center', paddingTop: '50px'}}>
+                    <img src='./lightGreenLoading.svg' width='100px' alt="Loading..."></img> 
+                </div>
+                <MyFooter />
             </Fragment>
         )
     }
     if (book===undefined){
         return (
-            <div>
-                <h1>Book not found!</h1>
-                <button onClick={() => history.goBack()}>Go back</button>
-            </div>
+            <Fragment>
+                <MyHeader />
+                <div style={{textAlign: 'center', paddingTop: '10px'}}>
+                    <h1>Book not found!</h1>
+                    <Link to='/books'>
+                        <button>Back to library</button>
+                    </Link>
+                </div>
+                <MyFooter />
+            </Fragment>
         )
     }
     return (
         <Fragment>
             <MyHeader />
-            <button onClick={() => history.goBack()}>Go back</button>
-            <div style={{textAlign: 'center'}}>
-                <h1>Title: {book.title}</h1>
-                <h1>Description: {book.description}</h1>
-                <h1>Author: {book.author}</h1>
-                <h3>id: {book.id}</h3>
+            <div style={{textAlign: 'center', paddingTop: '10px'}}>
+                    <Link to='/books'>
+                        <button>Back to library</button>
+                    </Link>
+                <br />
+                <br />
+                <br />
+                <font size="5">Title: </font><font size="6">{book.title}</font>
+                <br />
+                <br />
+                <font size="5">Description: </font><font size="6">{book.description}</font>
+                <br />
+                <br />
+                <font size="5">Author: </font><font size="6">{book.author}</font>
+                <br />
+                <br />
+                <font size="3">id: </font><font size="3">{book.id}</font>
+                <br />
+                <br />
                 {Buttons()}
             </div>
+            <MyFooter />
         </Fragment>
     )
 }

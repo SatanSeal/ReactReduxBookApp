@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom'; 
 
 const Search = () => {
 
-    const [Select,  setSelect ] = useState('title');
+    let history = useHistory();
+
+    const [Select,  setSelect ] = useState('Title');
     const [Value, setValue ] = useState('');
 
-    const onSearchClick = () => {
-        //history.push(`/search=${Select}=${Value}`)    not search again at already searched page
-        window.location.href=`/search=${Select}=${Value}`
+    const onSearchClick = async () => {
+        if (Value === "") {
+            return alert(`${Select} required!`)
+        }
+        history.push(`/search=${Select.toLowerCase()}=${Value}`);
     };
 
     const enterCheck = (event) => {
@@ -18,9 +23,10 @@ const Search = () => {
 
     return (
         <div>
-            <select onChange={e => setSelect(e.target.value.toLowerCase())}>
+            <select style={{height: '22px'}} onChange={e => setSelect(e.target.value)}>
                 <option>Title</option>
                 <option>Author</option>
+                <option>Description</option>
                 <option>id</option>
             </select>
             <input type="text" onChange={e => setValue(e.target.value)} onKeyPress={enterCheck}/>

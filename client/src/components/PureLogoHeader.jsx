@@ -1,9 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const PureLogoHeader = () => {
-
-    let history = useHistory();
 
     return (
         <table className="HeaderTable" cellPadding='20'>
@@ -12,7 +10,9 @@ const PureLogoHeader = () => {
                     <td width="33%" >
                     </td>
                     <td width="33%" align='center'>
-                        <img src="./sl.png" className="HeaderLogo" alt='logo' onClick={() => history.push('/')}/>
+                        <Link to='/'>
+                            <img src="./sl.png" className="HeaderLogo" alt='logo'/>
+                        </Link>
                     </td>
                     <td width="33%" align='right'>
                     </td>

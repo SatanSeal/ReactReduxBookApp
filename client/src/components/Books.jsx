@@ -9,9 +9,11 @@ const Books = ({books}) => {
             {books.map(book => (
                 <Link to={`/book_${book.id}`} key={book.id} className='bookLink'>
                     <li className='book'>
-                        <strong>Title:</strong> {book.title} 
+                        <strong>Title: </strong> {book.title} 
                         <br /> 
-                        <strong>Description:</strong> {book.description}
+                        <strong>Description: </strong> {book.description}
+                        <br />
+                        <strong>Author: </strong> {book.author}
                         <br />
                     </li>
                 </Link>
