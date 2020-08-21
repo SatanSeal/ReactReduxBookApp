@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import MyHeader from './components/MyHeader';
-import MyFooter from './components/myFooter';
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import MyHeader from './components/MyHeader'
+import MyFooter from './components/myFooter'
 
 function Home() {
-    
+
     return (
         <Fragment>
             <MyHeader />
@@ -14,6 +14,10 @@ function Home() {
                 <br />
                 <Link to='/books'>
                     <button>Our books</button>
+                </Link>
+                <br />
+                <Link to='/books2'>
+                    <button>Our books2</button>
                 </Link>
             </div>
             <MyFooter />

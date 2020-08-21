@@ -1,51 +1,36 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { showAlert, postBook, showModal, hideModal, getCSRFToken } from '../redux/actions'
 import '../css/main.css';
 
 const AddModal = ({author}) => {
 
+    const dispatch = useDispatch()
+    
+    const Loading = useSelector(state => state.app.loading)
+    const isShowed = useSelector(state => state.app.isShowed)
+    const Alert = useSelector(state => state.app.alert)  
+    const CSRFToken = useSelector(state => state.app.CSRFToken)
+
     const [title,  setTitle ] = useState('');
     const [description, setDescription] = useState('');
-    const [isShowed, setIsShowed] = useState(false);
-    const [CSRFToken, setCSRFToken] = useState();
-    const [Loading, setLoading] = useState(false);
-
-    const getCSRFToken = async () => {
-        const response = await fetch ('/secure/csrf-token');
-        const token = await response.json();
-        setCSRFToken(JSON.stringify(token).split('"')[3]);
-    };
 
     useEffect(() => {
-        getCSRFToken();
+        dispatch(getCSRFToken())
+        // eslint-disable-next-line
     }, []);
+    
 
     const onSubmitForm = async e => {
         e.preventDefault();
         if (!title.trim()) {
-            return alert('Title required!');
+            return dispatch(showAlert('Title required!'))
         }
         if (!description.trim()) {
-            return alert('Description required!');
+            return dispatch(showAlert('Description required!')) 
         }
-        try {
-            setLoading(true);
-            const body = { title, description, author };
-            await fetch("/books/add", {
-                method: "POST",
-                headers: {"Content-Type": "application/json",
-                          "CSRF-Token" : CSRFToken},
-                body: JSON.stringify(body)
-            }).then(
-                setLoading(false)
-            )
-            .then(
-                alert('Book successfuly added!')
-            ).then(
-                setIsShowed(false)
-            );
-        } catch (err) {
-            console.error(err.message)            
-        }
+        const body = { title, description, author }
+        dispatch(postBook( body, CSRFToken))
     };
 
     function loading () {
@@ -64,7 +49,7 @@ const AddModal = ({author}) => {
         return (
             <Fragment>
                 <button 
-                onClick={() => setIsShowed(!isShowed)}
+                onClick={() => dispatch(showModal())}
                 className='AddButton'>
                     Add Book
                 </button>
@@ -76,6 +61,10 @@ const AddModal = ({author}) => {
                 <div className="modal">
                     <div className= "modalContent" style={{textAlign: 'center'}}>
                         <h2 >Add a book</h2>
+
+                        {Alert && <div className="alert">{Alert}</div>}
+                        {Alert && <br />}
+
                         <form onSubmit={onSubmitForm}>
                             Title:
                             <br /> 
@@ -98,16 +87,22 @@ const AddModal = ({author}) => {
                         <br />
                         <table width="100%">
                             <tbody>
-                                <td width="50%">
-                                    <button onClick={() => setIsShowed(!isShowed)}>close</button>
-                                </td>
-                                <td width="50%">
-                                    <button 
-                                        onClick={onSubmitForm}
-                                        className='AddButton'>
-                                        Add Book
-                                    </button>
-                                </td>
+                                <tr>
+                                    <td width="50%">
+                                        <button 
+                                            onClick={() => dispatch(hideModal())}
+                                        >
+                                                close
+                                        </button>
+                                    </td>
+                                    <td width="50%">
+                                        <button 
+                                            onClick={onSubmitForm}
+                                            className='AddButton'>
+                                            Add Book
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table> 
                     </div>
@@ -118,4 +113,19 @@ const AddModal = ({author}) => {
     };
 };
 
-export default AddModal;
+/*   another way to get from redux-store
+
+const mapDispatchToProps = {
+    showAlert, showModal
+}
+const mapStateToProps = state => ({
+    Alert: state.app.alert,
+    Loading: state.app.loading,
+    isShowed: state.app.isShowed
+})
+export default connect(mapStateToProps, mapDispatchToProps)(AddModal);
+
+and add 'props.' before each element and add 'props' for import in component */
+
+
+export default connect(null, null)(AddModal);

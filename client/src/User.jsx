@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import PureLogoHeader from './components/PureLogoHeader';
-import AddModal from './components/AddModal';
+import AddModal from './components/AddModal2';
 import { useHistory } from 'react-router-dom';
 import MyFooter from './components/myFooter';
 

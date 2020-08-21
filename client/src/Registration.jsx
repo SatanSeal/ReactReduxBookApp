@@ -14,7 +14,6 @@ const Registration = () => {
     const [secondPass, setSecondPass] = useState(null);
     const [CSRFToken, setCSRFToken] = useState(null);
     const [Loading, setLoading] = useState(false);
-    //const [regError, setRegError] = useState(null);
 
     async function UserCheck() {
         const response = await fetch('/secure/verifyJWT');
@@ -74,7 +73,6 @@ const Registration = () => {
 
     const RegistrationSubmit = async e => {
         e.preventDefault();
-        //setRegError(null);
         if (!username){
             return alert('Username required!');
         }
@@ -93,7 +91,6 @@ const Registration = () => {
         }
         const existance = await FindUser('email', email);
         if (existance){
-            //return setRegError('User with this e-mail already registred!');
             return alert('User with this e-mail already registred!');
         }
         if (!firstPass){
@@ -187,7 +184,7 @@ const Registration = () => {
                                     Password:
                                 </td>
                                 <td>
-                                    <input type="password" onChange={e => setFirstPass(e.target.value)}></input>
+                                    <input type="password" title="Password must contain at least: 1 capital letter, 3 letters , 3 numeric, 1 special( !#%&,-.:;<=>@_ )" onChange={e => setFirstPass(e.target.value)}></input>
                                 </td>
                             </tr>
                             <tr>

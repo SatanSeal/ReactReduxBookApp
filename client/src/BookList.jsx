@@ -28,7 +28,7 @@ const BookList = () => {
         setCurrentPage(1);
         setBooksPerPage(BPPval); 
     }
-
+    
     const getBooks = async () => {
         try {
             const response = await fetch('/books');
@@ -36,7 +36,7 @@ const BookList = () => {
             setAllBooks(jsonData);
             setLoading(false);
         } catch (err) {
-            console.error(err.message);
+            console.error(err);
         }
     }
 

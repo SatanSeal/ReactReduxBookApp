@@ -102,7 +102,6 @@ const SearchedBooks = () => {
         )
     }
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
     if (Loading) {
         return (
             <Fragment>
@@ -140,7 +139,6 @@ const SearchedBooks = () => {
             <Pagination 
                 booksPerPage={BooksPerPage} 
                 totalBooks={AllBooks.length} 
-                paginate={paginate}
                 CurrentPage = {CurrentPage}
             />
             <MyFooter />

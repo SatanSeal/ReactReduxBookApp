@@ -82,6 +82,46 @@ td {
     transform: translate(-50%, -50%);
 }
 
+.alert {
+    text-align: center;
+    font-size: large;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #663e02;
+    background-color: #e9a85380;
+}
+/*
+.holder{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    transition: 1s;
+    opacity: 0;
+}
+
+.block {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    width: 30%;
+    height: 30%;
+    transform: translate(-50%, -50%);
+    background:rgba(255,255,255, 1);
+    padding:5px;
+    opacity: 0;
+    transition: 1s;
+    text-align: center;
+    padding-top: 10%;
+}
+
+/*.holder:hover .block{*/
+.block:hover {
+    opacity: 1;
+}
+*/
 .modal {
     position: fixed;
     left: 0;

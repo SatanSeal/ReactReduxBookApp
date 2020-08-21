@@ -1,23 +1,29 @@
 import React, {useState} from 'react';
+import { connect, useSelector, useDispatch } from 'react-redux'
 import '../css/main.css';
+import { showAlert, setCurrentPage } from '../redux/actions';
 
-const Pagination = ({booksPerPage, totalBooks, paginate, CurrentPage}) => {
+const Pagination = ({ totalBooks}) => {
 
     const [inputPage, setInputPage] = useState(1);
+
+    const dispatch = useDispatch()
+    const booksPerPage = useSelector(state => state.books.booksPerPage)
+    const CurrentPage = useSelector(state => state.books.currentPage)
 
     let pageNumbers = Math.ceil(totalBooks / booksPerPage);
 
     function prevPage () {
         if (CurrentPage !== 1) {
-            paginate(CurrentPage-1)
+            dispatch(setCurrentPage(CurrentPage-1))
         } else {
-            alert("It's first page!");
+            dispatch(showAlert("It's first page!"))
         }
     }
 
     function nextPage () {
         if (CurrentPage !== pageNumbers) {
-            paginate(CurrentPage+1)
+            dispatch(setCurrentPage(CurrentPage+1))
         } else {
             alert("It's last page!");
         }
@@ -33,8 +39,14 @@ const Pagination = ({booksPerPage, totalBooks, paginate, CurrentPage}) => {
         if (inputPage > pageNumbers) {
             return alert(`Page must be less than ${pageNumbers}`)
         }
-        paginate(inputPage)
+        dispatch(setCurrentPage(inputPage))
     }
+
+    const enterCheck = (event) => {
+        if (event.key === 'Enter'){
+            checkAndGo();
+        }
+    };
 
     return (
         <div style={{ textAlign: 'center'}}>
@@ -54,11 +66,11 @@ const Pagination = ({booksPerPage, totalBooks, paginate, CurrentPage}) => {
                 </img>            </div>
             <div style={{paddingTop: "10px"}}>
                 <label>Page: </label>
-                <input type="text" style={{width: "25px"}} onChange={e => setInputPage(+e.target.value)}/>
+                <input type="text" style={{width: "25px"}} onChange={e => setInputPage(+e.target.value)} onKeyPress={enterCheck}/>
                 <button onClick={()=>checkAndGo()}>go!</button>
             </div>
         </div>    
     )   
 }
 
-export default Pagination;
+export default connect(null, null)(Pagination);

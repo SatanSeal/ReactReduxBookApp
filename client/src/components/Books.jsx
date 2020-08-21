@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import '../css/main.css';
 
 const Books = ({books}) => {
-
     return (
         <ul type='none' className='bookArchive'>
             {books.map(book => (

@@ -1,0 +1,12 @@
+export const SHOW_LOADER = 'APP/SHOW_LOADER'
+export const HIDE_LOADER = 'APP/HIDE_LOADER'
+export const SHOW_ALERT = 'APP/SHOW_ALERT'
+export const HIDE_ALERT = 'APP/HIDE_ALERT'
+export const SHOW_MODAL = 'APP/SHOW_MODAL'
+export const HIDE_MODAL = 'APP/HIDE_MODAL'
+export const GET_CSRF = 'APP/GET_CSRF'
+
+export const GET_BOOKS = 'BOOKS/GET_BOOKS'
+export const POST_BOOK = 'BOOKS/POST_BOOK'
+export const SET_BOOKS_PER_PAGE = 'BOOKS/SET_BOOKS_PER_PAGE'
+export const SET_CURRENT_PAGE = 'BOOKS/SET_CURRENT_PAGE'
